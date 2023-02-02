@@ -7,11 +7,17 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDto {
+public class UserDto extends JdkSerializationRedisSerializer implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private Integer id;
     @NotEmpty
     @Size(min=4,max=50,message = "Username must be of min 4 characters and max of 50 characters!")
