@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = {"users"},key = "#userId",unless = "#result==null")
+    @Cacheable(value = "users",key = "#userId",unless = "#result==null")
     public UserDto getUserById(Integer userId) {
         LOG.info("Hitting db for getting a user!");
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User"," Id ",userId));
