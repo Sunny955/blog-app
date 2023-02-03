@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -25,4 +27,6 @@ public class User{
     private String password;
     @Column(nullable = true,length = 500)
     private String about;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
 }
