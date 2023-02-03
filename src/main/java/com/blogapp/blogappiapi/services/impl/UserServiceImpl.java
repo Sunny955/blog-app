@@ -2,7 +2,7 @@ package com.blogapp.blogappiapi.services.impl;
 
 import com.blogapp.blogappiapi.entities.User;
 import com.blogapp.blogappiapi.exceptions.ResourceNotFoundException;
-import com.blogapp.blogappiapi.payloads.UserDto;
+import com.blogapp.blogappiapi.payloads.dtos.UserDto;
 import com.blogapp.blogappiapi.repositories.UserRepo;
 import com.blogapp.blogappiapi.services.UserService;
 import org.modelmapper.ModelMapper;

@@ -1,7 +1,7 @@
 package com.blogapp.blogappiapi.controllers;
 
 import com.blogapp.blogappiapi.payloads.ApiResponse;
-import com.blogapp.blogappiapi.payloads.CategoryDto;
+import com.blogapp.blogappiapi.payloads.dtos.CategoryDto;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

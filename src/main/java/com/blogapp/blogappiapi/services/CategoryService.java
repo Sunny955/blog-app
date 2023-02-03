@@ -1,6 +1,6 @@
 package com.blogapp.blogappiapi.services;
 
-import com.blogapp.blogappiapi.payloads.CategoryDto;
+import com.blogapp.blogappiapi.payloads.dtos.CategoryDto;
 
 import java.util.List;
 

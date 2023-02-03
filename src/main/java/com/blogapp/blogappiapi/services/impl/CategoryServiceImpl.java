@@ -2,7 +2,7 @@ package com.blogapp.blogappiapi.services.impl;
 
 import com.blogapp.blogappiapi.entities.Category;
 import com.blogapp.blogappiapi.exceptions.ResourceNotFoundException;
-import com.blogapp.blogappiapi.payloads.CategoryDto;
+import com.blogapp.blogappiapi.payloads.dtos.CategoryDto;
 import com.blogapp.blogappiapi.repositories.CategoryRepo;
 import com.blogapp.blogappiapi.services.CategoryService;
 import org.modelmapper.ModelMapper;
