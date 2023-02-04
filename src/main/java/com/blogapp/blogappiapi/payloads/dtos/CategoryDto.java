@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @Getter
 @Setter
-public class CategoryDto {
+public class CategoryDto implements Serializable {
     private Integer categoryId;
     @NotBlank
     @Size(min=4,max=50,message = "categoryTitle must be of min 5 characters and max of 50 characters!")

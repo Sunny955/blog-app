@@ -3,6 +3,7 @@ package com.blogapp.blogappiapi.services.impl;
 import com.blogapp.blogappiapi.entities.Category;
 import com.blogapp.blogappiapi.entities.Post;
 import com.blogapp.blogappiapi.entities.User;
+import com.blogapp.blogappiapi.exceptions.ResourceNotFoundException;
 import com.blogapp.blogappiapi.payloads.dtos.CategoryDto;
 import com.blogapp.blogappiapi.payloads.dtos.PostDto;
 import com.blogapp.blogappiapi.payloads.dtos.UserDto;
@@ -14,10 +15,13 @@ import com.blogapp.blogappiapi.services.PostService;
 import com.blogapp.blogappiapi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PostServiceImpl implements PostService {
     @Autowired
@@ -28,6 +32,8 @@ public class PostServiceImpl implements PostService {
     private UserService userService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryRepo categoryRepo;
     @Override
     public PostDto createPost(PostDto postDto,Integer userId,Integer categoryId) {
 
@@ -59,22 +65,36 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getAllPost() {
-        return null;
+        List<Post> posts = this.postRepo.findAll();
+        return posts.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
     }
 
     @Override
+    @Cacheable(value="posts",key="#postId")
     public PostDto getPostById(Integer postId) {
-        return null;
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Posts","Post Id",postId));
+        return this.modelMapper.map(post,PostDto.class);
     }
 
     @Override
+    @Cacheable(value="posts",key="#categoryId")
     public List<PostDto> getPostsByCategory(Integer categoryId) {
-        return null;
+        CategoryDto categoryDto = this.categoryService.getCategory(categoryId);
+        Category cat = this.modelMapper.map(categoryDto,Category.class);
+
+        List<Post> posts = this.postRepo.findByCategory(cat);
+        List<PostDto> postDtos = posts.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
 
     @Override
+    @Cacheable(value="posts",key="#userId")
     public List<PostDto> getPostsByUser(Integer userId) {
-        return null;
+        UserDto userDto = this.userService.getUserById(userId);
+        User user = this.modelMapper.map(userDto,User.class);
+
+        List<Post> posts = this.postRepo.findByUser(user);
+        return posts.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
     }
 
     @Override
