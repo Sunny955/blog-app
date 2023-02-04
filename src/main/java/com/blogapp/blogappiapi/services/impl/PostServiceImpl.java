@@ -15,6 +15,8 @@ import com.blogapp.blogappiapi.services.PostService;
 import com.blogapp.blogappiapi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -54,13 +56,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @CachePut(value = "posts",key = "#postId")
     public PostDto updatePost(PostDto postDto, Integer postId) {
-        return null;
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Posts","Post Id",postId));
+        CategoryDto categoryDto = postDto.getCategory();
+        UserDto userDto = postDto.getUser();
+        post.setContent(postDto.getContent());
+        post.setCategory(this.modelMapper.map(categoryDto,Category.class));
+        post.setUser(this.modelMapper.map(userDto,User.class));
+        post.setTitle(postDto.getTitle());
+        post.setAddedDate(new Date());
+        post.setImageName("default.png");
+
+        Post savedPost = this.postRepo.save(post);
+        return this.modelMapper.map(savedPost,PostDto.class);
     }
 
     @Override
+    @CacheEvict(value = "posts",allEntries = false,key = "#postId")
     public void deletePost(Integer postId) {
-
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Posts","Post Id",postId));
+        this.postRepo.delete(post);
     }
 
     @Override

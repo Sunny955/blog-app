@@ -1,5 +1,6 @@
 package com.blogapp.blogappiapi.controllers;
 
+import com.blogapp.blogappiapi.payloads.ApiResponse;
 import com.blogapp.blogappiapi.payloads.dtos.PostDto;
 import com.blogapp.blogappiapi.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,19 @@ public class PostController {
         LOG.info("Called GET /api/posts/"+postId);
         PostDto postDto = this.postService.getPostById(postId);
         return new ResponseEntity<PostDto>(postDto,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId) {
+        LOG.info("Called DELETE /api/posts/"+postId);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<ApiResponse>(new ApiResponse("Post deleted successfully with id:"+postId,true),HttpStatus.OK);
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,@PathVariable Integer postId) {
+        LOG.info("Called PUT /api/posts/"+postId);
+        PostDto updatePost = this.postService.updatePost(postDto, postId);
+        return new ResponseEntity<PostDto>(updatePost,HttpStatus.OK);
     }
 }
