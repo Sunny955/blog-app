@@ -3,6 +3,7 @@ package com.blogapp.blogappiapi.controllers;
 import com.blogapp.blogappiapi.payloads.ApiResponse;
 import com.blogapp.blogappiapi.payloads.dtos.PostDto;
 import com.blogapp.blogappiapi.services.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class PostController {
     @Autowired
     private PostService postService;
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
         LOG.info("Called POST /api/user/"+userId+"/category/"+categoryId+"/posts");
         PostDto createdPost = this.postService.createPost(postDto,userId,categoryId);
         return new ResponseEntity<PostDto>(createdPost, HttpStatus.CREATED);
@@ -60,7 +61,7 @@ public class PostController {
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,@PathVariable Integer postId) {
+    public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable Integer postId) {
         LOG.info("Called PUT /api/posts/"+postId);
         PostDto updatePost = this.postService.updatePost(postDto, postId);
         return new ResponseEntity<PostDto>(updatePost,HttpStatus.OK);
