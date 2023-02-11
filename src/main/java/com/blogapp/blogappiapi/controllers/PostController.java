@@ -1,6 +1,7 @@
 package com.blogapp.blogappiapi.controllers;
 
 import com.blogapp.blogappiapi.payloads.ApiResponse;
+import com.blogapp.blogappiapi.payloads.PostResponse;
 import com.blogapp.blogappiapi.payloads.dtos.PostDto;
 import com.blogapp.blogappiapi.services.PostService;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class PostController {
     @Autowired
     private PostService postService;
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
-    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
+    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
         LOG.info("Called POST /api/user/"+userId+"/category/"+categoryId+"/posts");
         PostDto createdPost = this.postService.createPost(postDto,userId,categoryId);
         return new ResponseEntity<PostDto>(createdPost, HttpStatus.CREATED);
@@ -40,10 +41,15 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
+    public ResponseEntity<PostResponse> getAllPosts(
+            @RequestParam(value="pageNumber",defaultValue = "0",required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "postId",required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc",required = false) String sortDir
+    ) {
         LOG.info("Called GET /api/posts");
-        List<PostDto> postDtos = this.postService.getAllPost();
-        return new ResponseEntity<List<PostDto>>(postDtos,HttpStatus.OK);
+        PostResponse postResponse = this.postService.getAllPost(pageNumber,pageSize,sortBy,sortDir);
+        return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
     }
 
     @GetMapping("/posts/{postId}")
