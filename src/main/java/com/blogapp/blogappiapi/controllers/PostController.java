@@ -47,7 +47,7 @@ public class PostController {
             @RequestParam(value = "sortBy", defaultValue = "postId",required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc",required = false) String sortDir
     ) {
-        LOG.info("Called GET /api/posts");
+        LOG.info("Called GET /api/posts"+"?pageNumber"+"="+pageNumber+"&pageSize"+"="+pageSize+"&sortBy"+"="+sortBy+"&sortDir"+"="+sortDir);
         PostResponse postResponse = this.postService.getAllPost(pageNumber,pageSize,sortBy,sortDir);
         return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
     }
