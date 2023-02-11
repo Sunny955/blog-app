@@ -1,10 +1,6 @@
 package com.blogapp.blogappiapi.config;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@Getter
 public class AppConstants {
     public static final String PAGE_NUMBER="0";
     public static final String PAGE_SIZE="10";
