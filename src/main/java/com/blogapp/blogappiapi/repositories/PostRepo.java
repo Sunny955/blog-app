@@ -4,7 +4,6 @@ import com.blogapp.blogappiapi.entities.Category;
 import com.blogapp.blogappiapi.entities.Post;
 import com.blogapp.blogappiapi.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -13,6 +12,7 @@ public interface PostRepo extends JpaRepository<Post,Integer> {
 
     List<Post> findByCategory(Category category);
 
-//    @Query("select p from Post p where p.title = :key")
+//    @Query("select p from Post p where p.title like :key")
+//    List<Post> searchByTitle(@Params("key") String title);
     List<Post> findByTitleContaining(String title);
 }
