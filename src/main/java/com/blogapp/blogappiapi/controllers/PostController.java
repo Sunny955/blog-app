@@ -1,18 +1,29 @@
 package com.blogapp.blogappiapi.controllers;
 
 import com.blogapp.blogappiapi.config.AppConstants;
+import com.blogapp.blogappiapi.entities.Post;
 import com.blogapp.blogappiapi.payloads.ApiResponse;
 import com.blogapp.blogappiapi.payloads.PostResponse;
 import com.blogapp.blogappiapi.payloads.dtos.PostDto;
+import com.blogapp.blogappiapi.services.FileService;
 import com.blogapp.blogappiapi.services.PostService;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -21,6 +32,10 @@ public class PostController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     @Autowired
     private PostService postService;
+    @Autowired
+    private FileService fileService;
+    @Value("${project.image}")
+    private String path;
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
         LOG.info("Called POST /api/user/"+userId+"/category/"+categoryId+"/posts");
@@ -78,5 +93,22 @@ public class PostController {
         LOG.info("Called GET /api/posts/search/"+keywords);
         List<PostDto> searchedPosts = this.postService.searchPosts(keywords);
         return new ResponseEntity<List<PostDto>>(searchedPosts,HttpStatus.OK);
+    }
+    @PostMapping("/posts/image/upload/{postId}")
+    public ResponseEntity<PostDto> uploadPostImage(@RequestParam("image") MultipartFile image,@PathVariable Integer postId) throws IOException {
+        LOG.info("Called POST /api/posts/image/upload/"+postId);
+        PostDto postDto = this.postService.getPostById(postId);
+        String imageName = this.fileService.uploadImage(path,image);
+        postDto.setImageName(imageName);
+        PostDto updatedPost = this.postService.updatePost(postDto,postId);
+        return new ResponseEntity<PostDto>(updatedPost,HttpStatus.OK);
+    }
+
+    @GetMapping(value="/posts/image/{imageName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    public void downloadImage(@PathVariable String imageName, HttpServletResponse response) throws IOException,FileNotFoundException {
+        LOG.info("Called GET /api/posts/image/"+imageName);
+        InputStream resource = this.fileService.getResource(path,imageName);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
     }
 }
