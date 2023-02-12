@@ -1,6 +1,7 @@
 package com.blogapp.blogappiapi.services.impl;
 
 import com.blogapp.blogappiapi.services.FileService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

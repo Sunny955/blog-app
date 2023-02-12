@@ -1,6 +1,7 @@
 package com.blogapp.blogappiapi.payloads.dtos;
 
 
+import com.blogapp.blogappiapi.entities.Comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,5 +31,5 @@ public class PostDto implements Serializable {
     private CategoryDto category;
     @NotNull
     private UserDto user;
-
+    private Set<Comment> comments = new HashSet<>();
 }
