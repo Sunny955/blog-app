@@ -1,18 +1,16 @@
 package com.blogapp.blogappiapi.controllers;
 
 import com.blogapp.blogappiapi.config.AppConstants;
-import com.blogapp.blogappiapi.entities.Post;
 import com.blogapp.blogappiapi.payloads.ApiResponse;
 import com.blogapp.blogappiapi.payloads.PostResponse;
 import com.blogapp.blogappiapi.payloads.dtos.PostDto;
 import com.blogapp.blogappiapi.services.FileService;
 import com.blogapp.blogappiapi.services.PostService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

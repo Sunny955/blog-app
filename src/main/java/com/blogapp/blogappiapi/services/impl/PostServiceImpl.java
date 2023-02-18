@@ -10,7 +10,6 @@ import com.blogapp.blogappiapi.payloads.dtos.PostDto;
 import com.blogapp.blogappiapi.payloads.dtos.UserDto;
 import com.blogapp.blogappiapi.repositories.CategoryRepo;
 import com.blogapp.blogappiapi.repositories.PostRepo;
-import com.blogapp.blogappiapi.repositories.UserRepo;
 import com.blogapp.blogappiapi.services.CategoryService;
 import com.blogapp.blogappiapi.services.PostService;
 import com.blogapp.blogappiapi.services.UserService;
@@ -23,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.keyvalue.repository.KeyValueRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
